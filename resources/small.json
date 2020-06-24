@@ -40,7 +40,53 @@
     "schemes": [
         "https",
       "http"
-   ],
+    ],
+
+    "paths":{
+        "/user": {
+            "post": {
+                "summary": "Add a new user",
+                "description": "",
+                "consumes": [
+                    "application/json",
+                    "application/xml"
+                ],
+                "produces": [
+                    "application/xml",
+                    "application/json"
+                ],
+                "parameters": [
+                    {
+                        "in": "body",
+                        "name": "body",
+                        "description": "User object",
+                        "required": true,
+                        "schema": {
+                            "$ref": "#/components/schemas/User"
+                        },
+                        "examples": {
+                            "userExample": {
+                                "$ref": "#components/examples/userExample"
+                            }
+                        }
+                    }
+                ],
+                "responses": {
+                    "405": {
+                        "description": "Invalid input"
+                    }
+                },
+                "security": [
+                    {
+                        "petstore_auth": [
+                            "write:pets",
+                            "read:pets"
+                        ]
+                    }
+                ]
+            }
+        }
+    },
 
     "securityDefinitions": {
         "petstore_auth": {
@@ -56,6 +102,24 @@
             "type": "apiKey",
             "name": "api_key",
             "in": "header"
+        }
+    },
+    "components": {
+        "schemas": {
+            "User": {
+                "type": "object",
+                "properties": {"id": {"type": "string"},
+                               "first_name": {"type": "string"},
+                               "last_name": {"type": "string"}}}
+        },
+        "examples": {
+            "userExample": {
+                "value": {
+                    "id" : 1,
+                    "first_name" : "Andrew",
+                    "last_name" : "Petowner"
+                }
+            }
         }
     },
     "externalDocs": {
