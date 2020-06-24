@@ -98,7 +98,8 @@
             :produces #{"application/json"}
             :requestBody {:content {:application/json
                                     {:schema {"$ref" "#/components/schemas/User"}
-                                     :examples {:myexample {"$ref" "#/components/examples/myexample"}}}}}}
+                                     :examples {:myexample {"$ref" "#/components/examples/myexample"}
+                                                :myexample2 {"$ref" "#/components/examples/myexample2"}}}}}}
            (println "POST Request received for /user")
            (ok {:username "ALai57"
                 :first_name "Andrew"
@@ -107,7 +108,7 @@
          ;; END: This is my playground, ignore all this
          ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 
-         (GET "/pet-store/:file-name" [file-name :as req]
+         (GET "/prebuilt-swagger-examples/:file-name" [file-name :as req]
            ;; This allows us to serve whatever swagger spec we want from the
            ;; resources folder. If you check out `/resources`, you'll see at least
            ;; two files: `large.json` and `small.json`. Those are both valid
@@ -116,7 +117,7 @@
            (println "REQUEST FOR PET STORE SWAGGER UI" file-name)
            (ok (json/parse-string (slurp (clojure.java.io/resource file-name)))))
 
-         (GET "/swaggerdocs" req
+         (GET "/custom-generated-swaggerdocs" req
            ;; The `api` function in compojure api generates two different routes
            ;; in your app that handle swagger-related requests. One route is for
            ;; swagger ui and one route is for generating swagger documentation.
@@ -184,12 +185,21 @@
                          {:User {:type :object
                                  :properties {:username {:type :string}
                                               :first_name {:type :string}
-                                              :last_name {:type :string}}}}
+                                              :last_name {:type :string}}}
+                          :Pet {:type :object
+                                :properties {:name {:type :string}
+                                             :type {:type :string
+                                                    :enum [:dog :cat]}
+                                             :has_tail {:type :boolean}}}}
                          :examples
                          {:myexample {:summary "An example object"
-                                      :value {:username "Someexample"
+                                      :value {:username "An example"
                                               :first_name "Yup"
-                                              :last_name "It works"}}}})
+                                              :last_name "It works"}}
+                          :myexample2 {:summary "A different example"
+                                       :value {:username "Other example"
+                                               :first_name "Yay!"
+                                               :last_name "This is different"}}}})
                  (dissoc :swagger)
                  ok)))))))
 
