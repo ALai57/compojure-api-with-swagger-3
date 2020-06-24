@@ -43,6 +43,8 @@
 (def app
   (-> {;; :exceptions nil
        :swagger {:swagger "2.0"
+                 ;; This does not work
+                 :openapi "3.0.2"
                  :ui "/swagger"
                  :coercion :spec
                  :spec "/swagger.json"
@@ -83,8 +85,8 @@
             :produces #{"application/json"}
             :responses {200 {:description "The article that was created"
                              :content {:application/json
-                                       {:schema
-                                        {"$ref" "#/components/schemas/User"}}}}}}
+                                       {:schema {"$ref" "#/components/schemas/User"}
+                                        :examples {:myexample {"$ref" "#/components/examples/myexample"}}}}}}}
            (println "Request received for /user")
            (ok {:username "ALai57"
                 :first_name "Andrew"
@@ -164,7 +166,8 @@
              ;; Some test code we can use to modify the swagger documentation.
              ;; This is just play to see if we can add additional elements to
              ;; swagger docs (i.e. data models or examples)
-             (ok (assoc spec
+             (-> spec
+                 (assoc :openapi "3.0.2"
                         :components
                         {:schemas
                          {:User {:type :object
@@ -175,7 +178,9 @@
                          {:myexample {:summary "An example object"
                                       :value {:username "Someexample"
                                               :first_name "Yup"
-                                              :last_name "It works"}}}}))))))))
+                                              :last_name "It works"}}}})
+                 (dissoc :swagger)
+                 ok)))))))
 
 (defn -main
   "Start a reloadable server and start playing around"
