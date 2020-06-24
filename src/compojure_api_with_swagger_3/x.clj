@@ -24,6 +24,10 @@
             [spec-tools.swagger.core]
             ))
 
+;; DIfferences between swagger 2.0 and openapi 3.x
+;; https://blog.readme.com/an-example-filled-guide-to-swagger-3-2/
+
+
 ;; Define a spec that we will try to use for API documentation
 ;; This isn't working very well right now, because coercion between spec and
 ;; swagger seems busted
