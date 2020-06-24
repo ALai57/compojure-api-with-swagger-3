@@ -74,7 +74,7 @@
             :produces #{"application/json"}
             :responses {200 {:description "The article that was created"
                              #_#_:schema ::user}}}
-           (println "Request received for /")
+           (println "GET Request received for /")
            (ok {:username "ALai57"
                 :first_name "Andrew"
                 :last_name "Lai"}))
@@ -87,11 +87,22 @@
                              :content {:application/json
                                        {:schema {"$ref" "#/components/schemas/User"}
                                         :examples {:myexample {"$ref" "#/components/examples/myexample"}}}}}}}
-           (println "Request received for /user")
+           (println "GET Request received for /user")
            (ok {:username "ALai57"
                 :first_name "Andrew"
                 :last_name "Lai"}))
 
+         (POST "/user" req
+           :swagger
+           {:summary "Test endpoint"
+            :produces #{"application/json"}
+            :requestBody {:content {:application/json
+                                    {:schema {"$ref" "#/components/schemas/User"}
+                                     :examples {:myexample {"$ref" "#/components/examples/myexample"}}}}}}
+           (println "POST Request received for /user")
+           (ok {:username "ALai57"
+                :first_name "Andrew"
+                :last_name "Lai"}))
          ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
          ;; END: This is my playground, ignore all this
          ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
