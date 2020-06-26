@@ -59,7 +59,7 @@
 
        ;; `context` is here so that we can specify the coercion strategy. I
        ;; haven't been able to get clojure.specs to work without this here
-       (context "/test" []
+       (context "/api/v1" []
 
          ;; This is the coercion that is currently not working nicely. We may
          ;; need to write a custom coercion to support Spec, or just do more
@@ -72,16 +72,16 @@
          ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
          ;; BEGIN: This is my playground, ignore all this
          ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
-         (GET "/" req
-           :swagger
-           {:summary "Test endpoint"
-            :produces #{"application/json"}
-            :responses {200 {:description "The article that was created"
-                             #_#_:schema ::user}}}
-           (println "GET Request received for /")
-           (ok {:username "ALai57"
-                :first_name "Andrew"
-                :last_name "Lai"}))
+         #_(GET "/" req
+             :swagger
+             {:summary "Test endpoint"
+              :produces #{"application/json"}
+              :responses {200 {:description "The article that was created"
+                               #_#_:schema ::user}}}
+             (println "GET Request received for /")
+             (ok {:username "ALai57"
+                  :first_name "Andrew"
+                  :last_name "Lai"}))
 
          (GET "/user" req
            :swagger
@@ -100,19 +100,23 @@
            :swagger
            {:summary "Test endpoint"
             :produces #{"application/json"}
-            :requestBody {:content {:application/json
-                                    {:schema {"$ref" "#/components/schemas/User"}
-                                     :examples {:myexample {"$ref" "#/components/examples/myexample"}
-                                                :myexample2 {"$ref" "#/components/examples/myexample2"}}}}}}
+            :requestBody
+            {:content {:application/json
+                       {:schema {"$ref" "#/components/schemas/User"}
+                        :examples {:myexample {"$ref" "#/components/examples/myexample"}
+                                   :myexample2 {"$ref" "#/components/examples/myexample2"}}}}}
+            :responses
+            {200 {:description "The article that was created"
+                  :content {:application/json
+                            {:schema {"$ref" "#/components/schemas/User"}
+                             :examples {:myexample {"$ref" "#/components/examples/myexample"}}}}}}}
            (println "POST Request received for /user")
            (ok {:username "ALai57"
                 :first_name "Andrew"
-                :last_name "Lai"}))
-         ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
-         ;; END: This is my playground, ignore all this
-         ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+                :last_name "Lai"})))
 
-         (GET "/prebuilt-swagger-examples/:file-name" [file-name :as req]
+       (context "/swagger" []
+         (GET "/prebuilt-examples/:file-name" [file-name :as req]
            ;; This allows us to serve whatever swagger spec we want from the
            ;; resources folder. If you check out `/resources`, you'll see at least
            ;; two files: `large.json` and `small.json`. Those are both valid
@@ -121,7 +125,7 @@
            (println "REQUEST FOR PET STORE SWAGGER UI" file-name)
            (ok (json/parse-string (slurp (clojure.java.io/resource file-name)))))
 
-         (GET "/custom-generated-swaggerdocs" req
+         (GET "/custom-swaggerdocs" req
            ;; The `api` function in compojure api generates two different routes
            ;; in your app that handle swagger-related requests. One route is for
            ;; swagger ui and one route is for generating swagger documentation.
@@ -205,7 +209,8 @@
                                                :first_name "Yay!"
                                                :last_name "This is different"}}}})
                  (dissoc :swagger)
-                 ok)))))))
+                 ok))))
+       )))
 
 (defn -main
   "Start a reloadable server and start playing around"
