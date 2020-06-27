@@ -22,6 +22,8 @@
             [ring.swagger.swagger2 :as swagger2]
 
             [spec-tools.swagger.core]
+
+            [compojure-api-with-swagger-3.y :as y]
             ))
 
 ;; DIfferences between swagger 2.0 and openapi 3.x
@@ -216,4 +218,4 @@
   "Start a reloadable server and start playing around"
   [& args]
   (println "Starting server")
-  (httpkit/run-server (wrap-reload #'app) {:port 5000}))
+  (httpkit/run-server (wrap-reload #'y/app) {:port 5000}))
